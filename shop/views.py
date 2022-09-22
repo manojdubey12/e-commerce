@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from .models import Product
-from math import ceil
+from math import ceil, prod
 
 def index(request):
     products= Product.objects.all()
@@ -26,13 +26,23 @@ def about(request):
     return render(request,"shop/about.html")
 
 def contact(request):
-    return HttpResponse("shop contact")
+    if request.method == "POST":
+        name = request.POST.get('name', '')
+        email = request.POST.get('email', '')
+        phone= request.POST.get('phone', '')
+        desc = request.POST.get('desc', '')
+        print(name, email, phone, desc)
+    return render(request,"shop/contact.html")
 
 def trackers(request):
-    return HttpResponse("shop trackers")
+    return render(request,"shop/tracker.html")
 
 def search(request):
-    return HttpResponse("shop search")
+    return render(request,"shop/search.html")
 
-def productView(request):
-    return HttpResponse("shop productView")
+def productView(request,myid):
+    product= Product.objects.get(id=myid)
+    return render(request, 'shop/prodView.html',{'product':product})
+
+def checkout(request):
+    return render(request, 'shop/checkout.html')
